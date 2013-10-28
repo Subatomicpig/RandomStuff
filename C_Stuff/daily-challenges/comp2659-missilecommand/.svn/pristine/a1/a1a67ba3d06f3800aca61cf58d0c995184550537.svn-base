@@ -1,0 +1,38 @@
+#define CITY_LEFT 32
+#define CITY_RIGHT 32
+#define SILO_LEFT 32
+#define SILO_RIGHT 32
+#define MISSILE 32
+#define EXPLOSION 32
+
+
+
+int explosion_bitmap[EXPLOSION] =
+{
+
+}
+
+int missile_bitmap[MISSILE] = 
+{
+
+}
+
+int cityLeft_bitmap[CITY_LEFT] =
+{
+
+}
+
+int cityRight_bitmap[CITY_RIGHT] =
+{
+
+}
+
+int siloLeft_bitmap[SILO_LEFT] = 
+{
+
+}
+
+int siloRight_bitmap[SILO_RIGHT] =
+{
+
+}

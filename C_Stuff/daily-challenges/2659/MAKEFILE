@@ -1,0 +1,8 @@
+prog: main.o sub.o
+	cc68x -g main.o sub.o -o prog
+
+main.o: main.c sub.h
+	cc68x -g -c main.c
+
+sub.o: sub.s
+	gen -D -L2 sub.s

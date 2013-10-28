@@ -1,0 +1,58 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs" lang="cs">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="cs" />
+    <meta name="author" lang="cs" content="David Kohout; http://www.davidkohout.cz" />
+    <meta name="copyright" lang="cs" content="David Kohout; http://www.davidkohout.cz" />
+    <meta name="description" content="..." />
+    <meta name="keywords" content="..." />
+    <meta name="robots" content="all,follow" />
+    <link href="css/screen.css" type="text/css" rel="stylesheet" media="screen,projection" />
+
+    <title>Ryan Wrights Blog</title>
+  </head>
+  <body>
+
+    <div id="layout">
+      
+      <div id="header">
+        
+        <h1 id="logo"><a href="#" title="#">About<span></span></a></h1>
+        <hr class="noscreen" />   
+          
+              
+        <div id="navigation">
+        <ul>
+          <li><a href="home.html" title="go to home page">HOME</a></li>
+          <li><a href="about.html" title="go to about page">ABOUT</a></li>
+          <li><a href="media.html" title="go to media page">MEDIA</a></li>
+          <li><a href="contact.html" title="go to contact page">CONTACT</a></li>
+		  <li><a href="resume.html" title="go to resume page">RESUME</a></li>
+        </ul>
+        </div>
+        <hr class="noscreen" />  
+    
+      </div>
+          
+        <div id="main">
+        <h2>Oct 17th 2013</h2>
+        <p>about put stuff here about yourself you nob
+        </p>
+        
+        <h3>A continuation of the blog post update</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidi dunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercita tion ullamco laboris nisi ut aliquip ex ea commodo. cidi dunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercita tion ullamco laboris nisi ut aliquip ex ea commodo. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidi dunt ut labore et dolore magna aliqua.</p>
+        
+        
+          
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidi dunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercita tion ullamco laboris nisi ut aliquip ex ea commodo. cidi dunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercita tion ullamco laboris nisi ut aliquip ex ea commodo. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidi dunt ut labore et dolore magna aliqua.</p>
+        
+        
+        </div>
+        </div>
+        <div id="footer">
+        <div id="footer-inside">
+        
+        </div><div style="clear: both;"></div></div>
+  </body>
+</html>

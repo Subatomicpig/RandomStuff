@@ -1,0 +1,83 @@
+; TO DO: fill in your header doc. here
+;        (delete this comment)
+
+
+CR: 		equ 13
+LF: 		equ 10
+NULL: 		equ 0
+
+start: 		lea str,a1
+
+
+
+loopStart:	tst.b 	(a1)
+		beq 	loopEnd
+		clr.l 	d0
+		add.b 	(a1)+,d0
+		jsr 	write_char
+		bra 	loopStart
+
+loopEnd: 
+		
+numStart:	lea num,a2
+		add.w -(a2),d0
+		jsr write_char
+		cmp.w #3,(a2)
+		bls numStart
+
+
+		jsr exit
+
+str:		dc.b "The unsigned value in D1.W (shown in base-10) is:",CR,LF,NULL
+num: 		dc.b 3
+end; 		dc.b CR,LF,NULL
+
+
+
+;----- SUBROUTINE: read_char -----
+;
+; PURPOSE: waits for and reads a single keystroke from the keyboard.
+;
+; CALLER OUTPUT: returns the ASCII value of the key in the low byte
+;                of D0.
+;
+; IMPORTANT: NOTE THAT THE HIGHER_ORDER BYTES OF D0 ARE UNDEFINED.
+;            DON'T ASSUME THEY ARE ZEROED OUT!
+;
+; E.G. CALL:	jsr	read_char
+;		... now use D0.b ...
+
+read_char:	movem.l	d1-d2/a0-a2,-(sp)
+		move.w	#1,-(sp)
+		trap	#1
+		addq.l	#2,sp	
+		movem.l	(sp)+,d1-d2/a0-a2
+		rts
+
+
+;----- SUBROUTINE: write_char -----
+;
+; PURPOSE: writes a single character to the screen.
+;
+; CALLER INPUT: takes the ASCII value of the character in the low byte
+;               of D0.
+;
+; E.G. CALL:	move.b	#'a',d0
+;		jsr	write_char
+
+write_char:	movem.l	d0-d2/a0-a2,-(sp)
+		and.w	#$00FF,d0
+		move.w	d0,-(sp)
+		move.w	#2,-(sp)
+		trap	#1
+		addq.l	#4,sp
+		movem.l	(sp)+,d0-d2/a0-a2
+		rts
+
+
+;----- SUBROUTINE: exit -----
+;
+; PURPOSE: terminates the program.  This routine never returns.
+
+exit:		clr.w	-(sp)
+		trap	#1

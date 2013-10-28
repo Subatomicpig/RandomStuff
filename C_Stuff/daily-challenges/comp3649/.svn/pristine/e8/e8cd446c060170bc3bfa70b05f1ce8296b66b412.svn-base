@@ -1,0 +1,36 @@
+
+
+%define cells lists of lists from 1-9 
+cells(Row,Col) :- numlist(1,9,Inds),
+				  setof(Row/Col),
+					   (member(Row,Inds),
+					    member(Col,Inds)).
+						
+%defines unassigned list list of cells 9x9
+Unas(cells) :- numlist(1,9,Inds),
+			   setof(Row/Col,
+					(member(Row,Inds),
+					 member(Col,Inds))).
+				
+
+%creates a blank puzzle with 5 sets
+blank(puzzle(Unas,[],Sets,Sets,Sets)):- numlist(1,9,Inds),
+										setof(Row/Col/Reg,
+											 (member(Row,Inds),
+											  member(Col,Inds),
+											  region(Row,Col,Reg)),
+											  Unas),
+											  setof(I - Inds,
+													member(I,Inds),
+													listSets(Sets
+													),
+												list_to_assoc(listSets,Sets)).
+%defines region												
+region(Row,Col,Reg) :- NextRow is Row - 1,
+					   NextCol is Col - 1,
+					   Reg is (NextRow - NextRow mod 3 + NextCol // 3) + 1.
+					   
+%place(puzzle(Unas,As,RowSets,ColSets,RegSets),Row,Col,Sym,NewPuz) :- 
+
+
+

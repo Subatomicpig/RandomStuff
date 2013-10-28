@@ -1,0 +1,56 @@
+
+import java.awt.*;
+
+import javax.swing.*;
+
+import java.awt.event.*;
+
+
+public class lab1 implements ActionListener{
+
+
+	
+	
+	
+	public static void main(String[] args) {
+		
+		lab1 obj = new lab1();
+		JFrame mainWindow = new JFrame("JButton example");
+		JButton b;
+		
+		Container container = mainWindow.getContentPane();
+		container.setLayout(new BorderLayout());
+		
+		
+		JPanel display = new JPanel(new GridLayout(0,2,5,5));
+		display.setBorder( BorderFactory.createTitledBorder("Display") );
+		
+		
+		JPanel button = new JPanel( new GridLayout(0,1,3,3) );
+		button.setBorder(BorderFactory.createTitledBorder("I MADE A BUTTON"));
+		container.add(button,BorderLayout.SOUTH);
+		
+		
+		b = new JButton("I AM BUTTON");
+		b.addActionListener(obj);
+		button.add(b);
+		
+		container.add(display,BorderLayout.CENTER);
+	
+		
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		
+		mainWindow.setSize(400, 400);
+		mainWindow.setLocation(500, 500);
+		
+		mainWindow.setVisible(true);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		System.out.println("Hello");
+		
+	}
+
+}

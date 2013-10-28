@@ -1,0 +1,40 @@
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+
+
+
+	public static void main(String[] args) {
+		
+		
+		
+	
+	}
+	
+	
+	public void show()
+	{
+		
+	}
+	
+	private void setUpWindow()
+	{
+		
+		
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+}

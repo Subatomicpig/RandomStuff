@@ -1,0 +1,53 @@
+NULL		equ	0
+
+
+start:		; [TO DO] test call to depth goes here
+
+		bsr	exit
+
+
+; example binary tree, with node "five" at the root:
+
+five:		dc.l	5
+		dc.l	two
+		dc.l	eight
+
+two:		dc.l	2
+		dc.l	one
+		dc.l	four
+
+one:		dc.l	1
+		dc.l	NULL
+		dc.l	NULL
+
+four:		dc.l	4
+		dc.l	three
+		dc.l	NULL
+
+three:		dc.l	3
+		dc.l	NULL
+		dc.l	NULL
+
+eight:		dc.l	8
+		dc.l	NULL
+		dc.l	nine
+
+nine:		dc.l	9
+		dc.l	NULL
+		dc.l	NULL
+
+
+;----- SUBROUTINE: depth -----
+
+; [TO DO] parameter and local variable offset constants go here
+
+depth:		; [TO DO] code goes here
+		rts
+
+
+;----- SUBROUTINE: exit -----
+;
+; PURPOSE: terminates the program.  This routine never returns.
+
+exit:		clr.w	-(sp)
+		trap	#1

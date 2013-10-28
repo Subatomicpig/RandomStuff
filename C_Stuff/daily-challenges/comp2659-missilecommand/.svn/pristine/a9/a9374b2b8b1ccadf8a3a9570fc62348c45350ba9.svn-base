@@ -1,0 +1,146 @@
+/*
+	Comp 2659 Assignment: Missile Command
+	Donovan Paget & Ryan Wright
+*/
+#include "model.h"
+
+struct city destroy_City(struct city);
+struct missile_Silo update_Ammo(struct missile_Silo);
+struct missile_Silo destroy_Silo(struct missile_Silo);
+struct missile missile_Fired(unsigned int, unsigned int, struct missile);
+struct missile missile_Destroyed(struct missile);
+struct missile enemy_Missile_Fired(unsigned int finalX, unsigned int finalY, struct missile mis,unsigned int sX);
+struct missile friendly_Missile_Fired(unsigned int finalX, unsigned int finalY, struct missile mis,unsigned int sX);
+struct missile missile_Movement(unsigned int nextX, unsigned int nextY, struct missile Shot);
+void create_Explosion(unsigned int coordX,unsigned int coordY);
+void reset_positions(struct missile *mis);
+
+
+
+
+/*
+	Purpose: update city health when hit by missile
+	Input  : a city that is to be destroyed
+	Returns: destroyed city
+	Assume : nothing
+*/
+struct city destroy_City(struct city cityX)
+{
+	cityX.health = 0;
+	create_Explosion(cityX.pX, cityX.pY);
+	return cityX;
+}
+
+/*
+	Purpose: silo to update ammo count of
+	Input  : a silo to update
+	Returns: silo with updated ammo
+	Assume : nothing
+*/
+struct missile_Silo update_Ammo(struct missile_Silo siloX)
+{
+	if (siloX.ammo > 0){
+		siloX.ammo--;
+	}
+	return siloX;
+}
+
+/*
+	Purpose: update silo health when hit by missile
+	Input  : a silo that has been damaged
+	Returns: a silo that has been damaged
+	Assume : nothing
+*/
+struct missile_Silo destroy_Silo(struct missile_Silo siloX)
+{
+	siloX.health = 0;
+	create_Explosion(siloX.pX, siloX.pY);
+	return siloX;
+}
+
+/*
+	Purpose: create an explosion at x and y
+	Input  : an x and a y coordinate
+	Returns: an explosion situated at those coordinates
+	Assume : nothing
+*/
+void create_Explosion(unsigned int coordX,unsigned int coordY)
+{
+	struct explosion newExplosion = {0,1,0,0};
+	
+	newExplosion.pX = coordX;
+	newExplosion.pY = coordY;
+}
+
+/*
+	Purpose: update missile location when it is being moved
+	Input  : an x and y coordinate and a missile to update
+	Returns: a missile with those coordinates
+	Assume : nothing
+*/
+struct missile missile_Movement(unsigned int nextX, unsigned int nextY, struct missile Shot)
+{
+	Shot.currentX = nextX;
+	Shot.currentY = nextY;
+	return Shot;
+}
+
+/*
+	Purpose: destroy missile when it reaches the destination
+	Input  : a missile that has been fired
+	Returns: a missile that has been destroyed and an explosion at that location
+	Assume : nothing
+*/
+struct missile missile_Destroyed(struct missile Shot)
+{
+	Shot.destroyed = 1; 
+	create_Explosion(Shot.currentX, Shot.currentY);
+	return Shot;
+}
+
+
+/*
+	Purpose: create an enemy missile heading towards a coordinate
+	Input  : a y and x coordinate for the missile to head towards, and the missile itself
+	Returns: a missile with updated finalx and finaly coordinates
+	Assume : nothing
+*/
+struct missile enemy_Missile_Fired(unsigned int finalX, unsigned int finalY, struct missile mis,unsigned int sX)
+{
+	mis.currentX = sX;
+	mis.startX = sX;
+	mis.endX = finalX;
+	mis.endY = finalY;
+	mis.destroyed = 0;
+	return mis;
+}
+
+/*
+	Purpose: create a friendly missile heading towards a coordinate
+	Input  : a y and x coordinate for the missile to head towards, and the missile itself
+	Returns: a missile with updated finalx and finaly coordinates
+	Assume : nothing
+*/
+struct missile friendly_Missile_Fired(unsigned int finalX, unsigned int finalY, struct missile mis,unsigned int sX)
+{
+	mis.currentX = sX;
+	mis.startX = sX;
+	mis.endX = finalX;
+	mis.endY = finalY;
+	mis.destroyed = 0;
+	return mis;
+}
+
+void reset_positions(struct missile *mis){int dx1, dx2, dy1, dy2, numerator, longest, shortest;
+	(*mis).dx1 = 0;
+	(*mis).dx2 = 0;
+	(*mis).dy1 = 0;
+	(*mis).dy2 = 0;
+	(*mis).numerator = 0;
+	(*mis).longest = 0;
+	(*mis).shortest = -1;
+}
+	
+
+
+

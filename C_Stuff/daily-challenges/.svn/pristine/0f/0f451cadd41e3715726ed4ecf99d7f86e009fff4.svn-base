@@ -1,0 +1,34 @@
+package parser;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.Scanner;
+
+
+
+
+public class parser {
+
+	static FileChannel inChannel = null;
+	static MappedByteBuffer buffer = null;
+	
+	//the main class of this program
+	public static void main(String [] args) throws IOException
+	{
+		
+		inChannel = new FileInputStream("test.txt").getChannel();
+		buffer = inChannel.map(FileChannel.MapMode.READ_ONLY, 0, inChannel.size());
+		
+		
+		System.out.println("Hello");
+	}
+}
+	
+	
+

@@ -1,0 +1,210 @@
+/*
+	Comp 2659 Assignment: Missile Command
+	Donovan Paget & Ryan Wright
+*/
+#include "model.h"
+#include "raster.h"
+#include "td.h"
+
+long clockGet();
+void processEnemyMissiles(struct missile *mis, struct explosion *exp, long clock,int misCount);
+void calculateLine(struct missile *mis);
+void getPositions(struct missile *mis);
+
+
+
+/*
+	Purpose: animate and run the game with the clock
+	Input  : a char length pointer to the frame buffer and a long length pointer to the frame buffer
+	Returns: nothing, but constantly runs the game and its functions
+	Assume : nothing
+*/
+void animate_main(char *base, long *iBase){
+	
+	int enMisCount = 0;
+	int plMisCount = 0;
+	int x,y = 0;
+	long clock;
+	long newClock;
+	int mouseClicked = 0;
+	unsigned short mouseX,mouseY;
+
+
+
+
+	int randX,randY;
+
+
+
+
+	
+	/*arrays for missiles*/
+	struct missile plMis[20] = {0,0,0,0,0,0,1,1,0,0,0,0,0,0,-1};
+	struct missile enMis[20] = {0,0,0,0,0,0,1,1,0,0,0,0,0,0,-1};
+	
+	struct missile_Silo middle_Silo = {10000,1,288,336};
+	struct missile enemyMis = {0,0,0,0,0,0,1,1,0,0,0,0,0,0,-1};
+	struct missile friendMis = {0,0,0,0,0,0,0,1,0,0,0,0,0,0,-1};
+	struct city city1 = {1,64,336};
+	struct city city2 = {1,144,336};
+	struct city city3 = {1,224,336};
+	struct city city4 = {1,384,336};
+	struct city city5 = {1,464,336};
+	struct city city6 = {1,544,336};
+	struct explosion exp = {0,0,0,0};
+
+
+	
+
+	while(!Cconis()){
+		
+		/*random values for enemy missiles*/
+		randX = rand() % 1 + 639;
+		randY = rand() % 200 + 366;
+		
+		if (mouseClicked == 1){ /* process on input */
+				plMis[plMisCount] = friendly_Missile_Fired(mouseX, mouseY, plMis[plMisCount],0);
+				/*enMis[enMisCount] = enemy_Missile_Fired(mouseX, mouseY, enMis[enMisCount],0);*/
+		}
+
+		clock = clockGet();
+		if (clock != newClock){ /* process on clock change */
+
+			mouseClicked = get_mouse_pos(&mouseX,&mouseY);
+			plot_bitmap(iBase,mouseX,mouseY,mouse,6);
+			clear_screen(base);
+			render_main(iBase, city1, city2, city3, city4, city5, city6, middle_Silo, enMis[enMisCount], exp);
+
+			/*process the player missiles being fired */
+			if(plMis[plMisCount].destroyed == 0 || exp.exists == 1){
+				processEnemyMissiles(&plMis[plMisCount],&exp,clock,plMisCount);
+			}
+
+			/*process the enemy missiles being fired */
+			if (enMis[enMisCount].destroyed == 0 || exp.exists == 1){
+					processEnemyMissiles(&enMis[enMisCount],&exp,clock,enMisCount);
+			}
+		}
+
+
+
+		
+		if(clock % 70 == 0)
+		{
+			enMis[enMisCount] = enemy_Missile_Fired(randX,randY, enMis[enMisCount],randX);
+			enMisCount++;
+		}
+
+
+
+		newClock = clockGet();
+	}
+	
+
+}
+
+
+
+/*
+	Purpose: animate the enemy missiles and the lines following them
+	Input  : a missile struct, an explosion struct, and the clock
+	Returns: nothing, but updates the missiles current position, and updates the explosion if necessary
+	Assume : nothing
+*/
+void processEnemyMissiles(struct missile *mis, struct explosion *exp, long clock,int enMisCount){
+			if ((*mis).shortest == -1){
+					calculateLine(mis);
+			}
+			if ((*mis).currentX < (*mis).endX){ 
+				getPositions(mis);
+			}
+			if ((*mis).currentX == (*mis).endX || (*mis).currentY == (*mis).endY && (*mis).endX != 0)
+			{
+				(*mis).destroyed = 1;
+				(*exp).exists = 0;
+				(*exp).pX = (*mis).endX;
+				(*exp).pY = (*mis).endY;
+				if((*exp).size < 5 && clock % 15 == 0)
+				{
+					(*exp).size++;
+				}
+				if((*exp).size == 5)
+				{
+					(*exp).size = 0;
+					(*exp).exists = 0;
+					(*mis).currentX = 0;
+					(*mis).currentY = 0;
+					(*mis).destroyed = 0;
+				}
+				reset_positions(mis);
+				
+			}
+
+			enMisCount++;
+}
+
+void calculateLine(struct missile *mis)
+{
+	int w = (*mis).endX - (*mis).currentX;
+    int h = (*mis).endY - (*mis).currentY;
+	if (w < 0){
+		(*mis).dx1 = -1;
+		(*mis).dx2 = -1;
+	}		
+	else if (w > 0){
+		(*mis).dx1 = 1 ;
+		(*mis).dx2 = 1;
+	}
+    if (h<0){ 
+		(*mis).dy1 = -1;
+	}		
+	else if (h>0){
+		(*mis).dy1 = 1;
+	}
+    (*mis).longest = abs(w);
+    (*mis).shortest = abs(h);
+    
+	if (!((*mis).longest >= (*mis).shortest)) {
+        (*mis).longest = abs(h) ;
+        (*mis).shortest = abs(w) ;
+        if (h < 0){
+			(*mis).dy2 = -1;
+		}	
+		else if (h > 0){
+			(*mis).dy2 = 1;
+		}
+        (*mis).dx2 = 0;            
+    }
+	(*mis).numerator = (*mis).longest >> 1;
+}
+
+void getPositions(struct missile *mis){
+        (*mis).numerator += (*mis).shortest;
+        if (!((*mis).numerator<(*mis).longest)) {
+            (*mis).numerator -= (*mis).longest;
+            (*mis).currentX += (*mis).dx1;
+            (*mis).currentY += (*mis).dy1;
+        } else {
+            (*mis).currentX += (*mis).dx2;
+            (*mis).currentY += (*mis).dy2;
+        }
+}
+
+/*
+	Purpose: get the current time on the clock
+	Input  : nothing
+	Returns: current clock time
+	Assume : nothing
+*/
+long clockGet()
+{
+	long *timer = 0x462;
+	long c_time;
+	long old_ssp;
+
+	old_ssp = Super(0);
+	c_time = *timer;
+	Super(old_ssp);
+
+	return c_time;
+}

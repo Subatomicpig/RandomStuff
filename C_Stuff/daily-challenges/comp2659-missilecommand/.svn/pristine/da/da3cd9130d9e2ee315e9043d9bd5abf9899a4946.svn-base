@@ -1,0 +1,232 @@
+#include "model.h"
+#include <stdio.h>
+#include <math.h>
+
+
+
+#define PI 3.14159265
+
+struct city destroy_City(struct city);
+struct missile_Silo update_Ammo(struct missile_Silo);
+struct missile_Silo destroy_Silo(struct missile_Silo);
+struct missile missile_Fired(unsigned int, unsigned int, struct missile);
+struct missile missile_Destroyed(struct missile);
+struct missile enemy_Missile_Fired();
+struct missile friendly_Missile_Fired(unsigned int, unsigned int);
+struct missile missile_Movement(unsigned int nextX, unsigned int nextY, struct missile Shot);
+struct missile missile_Angle_Fired(unsigned int endPosX,unsigned int endPosY,struct missile miss);
+
+
+
+void create_Explosion(unsigned int, unsigned int);
+
+int choose_silo(unsigned int);
+
+void test_Driver();
+
+
+int main()
+{
+
+	/*Code for the current state of the game the inital state*/
+	int p1_Score = 0;
+
+	/*The silo position*/
+	struct missile_Silo left_Silo = { 10,1,40,350};
+	struct missile_Silo middle_Silo = {10,1,300,350};
+	struct missile_Silo right_Silo = {10,1,560,350};
+
+	/*city position*/
+	struct city city1 = {1,120,350};
+	struct city city2 = {1,200,350};
+	struct city city3 = {1,280,350};
+	struct city city4 = {1,360,350};
+	struct city city5 = {1,440,350};
+	struct city city6 = {1,520,350};
+
+	test_Driver();
+
+
+	return 0;
+}
+
+/* Start of event handler functions */
+
+
+
+
+/*Function to test all the other functions in the code so far*/
+void test_Driver()
+{
+	struct city test_City = {1,120,350};
+	struct missile_Silo test_Silo = {10,1,300,350};
+	struct missile test_Missile = {100,100,10,10,0,0};
+
+
+	
+	
+	printf("Missile X Position Before Firing: %d\n",test_Missile.currentX);
+	printf("Missile Y Position Before Firing: %d\n",test_Missile.currentY);
+	test_Missile = missile_Angle_Fired(20,20,test_Missile);
+	printf("Missile X Position After Firing: %d\n",test_Missile.currentX);
+	printf("Missile Y Position After Firing: %d\n",test_Missile.currentY);
+
+	/* Working */
+	printf("City Health Before Test is: %d\n",test_City.health);
+	test_City = destroy_City(test_City);
+	printf("City Health is: %d\n",test_City.health);
+
+	printf("Silo Ammo Before Test is: %d\n",test_Silo.ammo);
+	test_Silo = update_Ammo(test_Silo);
+	printf("Silo Ammo is: %d\n",test_Silo.ammo);
+
+	printf("Silo Before Destroyed is: %d\n",test_Silo.health);
+	test_Silo = destroy_Silo(test_Silo);
+	printf("Silo After Destroyed is: %d\n",test_Silo.health);
+
+	printf("Testing missile movement position before X:%d Y:%d\n",test_Missile.currentX,test_Missile.currentY);
+	test_Missile = missile_Movement(11,11,test_Missile);
+	printf("Testing missile movement position after X:%d Y:%d\n",test_Missile.currentX,test_Missile.currentY);
+
+	printf("Testing missile destroyed Before:%d\n",test_Missile.destroyed);
+	test_Missile = missile_Destroyed(test_Missile);
+	printf("Testing missile destroyed After:%d\n",test_Missile.destroyed);
+
+	printf("Testing enemy missile fired :%d\n",test_Missile.team);
+	test_Missile = enemy_Missile_Fired();
+	printf("Testing enemy missile fired :%d\n",test_Missile.team);
+
+	printf("Testing friendly missile fired :%d\n",test_Missile.team);
+	test_Missile = friendly_Missile_Fired(100,100);
+	printf("Testing friendly missile fired :%d\n",test_Missile.team);
+
+	printf("Testing silo choice:%d\n",choose_silo(1));
+	printf("Testing silo choice:%d\n",choose_silo(200));
+	printf("Testing silo choice:%d\n",choose_silo(500));
+
+	
+}
+
+
+
+
+
+
+
+/* Destroys city when it is hit */
+struct city destroy_City(struct city cityX)
+{
+	cityX.health = 0;
+	create_Explosion(cityX.pX, cityX.pY);
+	return cityX;
+}
+
+/* Decreases ammo count when missile is fired from a silo */
+struct missile_Silo update_Ammo(struct missile_Silo siloX)
+{
+	if (siloX.ammo > 0){
+		siloX.ammo--;
+	}
+	return siloX;
+}
+
+/* Destroys a silo if the silo is hit by a missile */
+struct missile_Silo destroy_Silo(struct missile_Silo siloX)
+{
+	siloX.health = 0;
+	create_Explosion(siloX.pX, siloX.pY);
+	return siloX;
+}
+
+
+
+/* Updates a missiles position, will need to be called from another function which manages 
+   the diagonal movements and whether it is a friendly or enemy missile */
+struct missile missile_Movement(unsigned int nextX, unsigned int nextY, struct missile Shot)
+{
+	Shot.currentX = nextX;
+	Shot.currentY = nextY;
+	return Shot;
+}
+
+/* Updates a missile when it reaches the target */
+struct missile missile_Destroyed(struct missile Shot)
+{
+	Shot.destroyed = 1; 
+	create_Explosion(Shot.currentX, Shot.currentY);
+	return Shot;
+}
+
+/* Creates an explosion at the positions given */
+void create_Explosion(unsigned int coordX, unsigned int coordY)
+{
+	
+	struct explosion newExplosion = {0,1,coordX,coordY}; 
+
+	while (newExplosion.size < 10){
+		/* Would also contain code to update the image and the sound */
+		newExplosion.size++;
+	}
+	newExplosion.exists = 0;
+	
+}
+
+
+/*testing figureing out the missile*/
+struct missile missile_Angle_Fired(unsigned int endPosX,unsigned int endPosY,struct missile miss)
+{
+	double posX = endPosX - miss.currentX; 
+	double posY = endPosY - miss.currentY; 
+
+	int angleX = atan(posX) * 180 / PI;
+	int angleY = atan(posY) * 180 / PI;
+
+	printf("Testing to see if the angle is coming out correctly %d\n",angleX);
+	printf("Testing to see if the angle is coming out correctly %d\n",angleY);
+
+	return miss;
+
+}
+
+/* Creates an enemy missile */
+struct missile enemy_Missile_Fired()
+{
+	/* Need some way to randomize where they come out from at the top of the screen
+	and their final coordinate */
+	struct missile enemyMissile = {0,0,0,0,1,0};
+	return enemyMissile;
+}
+
+/* Creates a friendly missile, heading towards finalX,finalY */
+struct missile friendly_Missile_Fired(unsigned int finalX, unsigned int finalY)
+{
+	/*Have to figure out which silo, depending on ammo, health, etc. */
+	/*Position would depends upon silo chosen*/
+	struct missile friendlyMissile = {0,0,0,0,0,0};
+	return friendlyMissile;
+}
+
+/* Chooses the correct silo for a missile to be fired from depending on where the missile
+is heading, 1 = left silo, 2 = middile silo, 3 = right silo */
+int choose_silo(unsigned int finalX)
+{
+	/* Have to find a way to check ammo counts and then spawn the missile from the appropriate
+	silo */ 
+	int choice = 0;
+	if (finalX < 180){
+		choice = 1;
+	}
+	else if (finalX > 180 && finalX < 480){
+		choice = 2;
+	}
+	else{
+		choice = 3;
+	}
+	return choice;
+}
+
+
+	
+
+
+

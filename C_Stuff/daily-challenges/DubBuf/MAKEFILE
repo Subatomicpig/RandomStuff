@@ -1,0 +1,17 @@
+prog: td.o clear_qk.o
+	cc68x -g td.o clear_qk.o -o prog
+
+td.o: td.c raster.h raster.c model.c renderer.c
+	 cc68x -g -c td.c	
+
+clear_qk.o: clear_qk.s
+		gen -D -L2 clear_qk.s
+ 
+renderer.o: renderer.c model.h raster.h
+	cc68x -g -c raster.c
+ 
+raster.o: raster.c bitmap.h
+	cc68x -g -c raster.c		
+
+model.o: model.c model.h
+	cc68x -g -c model.c

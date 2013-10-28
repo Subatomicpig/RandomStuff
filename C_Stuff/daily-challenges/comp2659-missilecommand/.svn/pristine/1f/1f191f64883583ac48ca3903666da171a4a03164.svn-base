@@ -1,0 +1,138 @@
+#include "raster.h"
+#include "model.h"
+#include "raster.c"
+#include "model.c"
+#include <osbind.h>
+#include <stdio.h>
+
+#define BYTES_PER_SCREEN 32000
+void testRaster(char*, long int*);
+void testModel();
+
+int main()
+{
+
+	/*frame buffer*/
+	char *base;	
+	long int *iBase;
+	unsigned long test = 0xFFFFFFFF;
+
+
+	/*Code for the current state of the game the inital state*/
+	int p1_Score = 0;
+
+	/*The silo position*/
+	struct missile_Silo middle_Silo = {10,1,300,350};
+
+	/*city position*/
+	struct city city1 = {1,120,350};
+	struct city city2 = {1,200,350};
+	struct city city3 = {1,280,350};
+	struct city city4 = {1,360,350};
+	struct city city5 = {1,440,350};
+	struct city city6 = {1,520,350};
+
+	base = Physbase();
+	iBase = Physbase();
+	
+	testRaster(base,iBase);
+	Cnecin();
+	test = test ;
+	
+
+	return 0;
+}
+
+/* model.c test driver */
+void testModel(){
+    struct city test_City = {1,120,350};
+    struct missile_Silo test_Silo = {10,1,300,350};
+    struct missile test_Missile = {100,100,10,10,0,0};
+
+    /* Working */
+    printf("City Health Before Test is: %d\n",test_City.health);
+    test_City = destroy_City(test_City);
+    printf("City Health is: %d\n",test_City.health);
+
+    printf("Silo Ammo Before Test is: %d\n",test_Silo.ammo);
+    test_Silo = update_Ammo(test_Silo);
+    printf("Silo Ammo is: %d\n",test_Silo.ammo);
+
+    printf("Silo Before Destroyed is: %d\n",test_Silo.health);
+    test_Silo = destroy_Silo(test_Silo);
+    printf("Silo After Destroyed is: %d\n",test_Silo.health);
+
+    printf("Testing missile movement position before X:%d Y:%d\n",test_Missile.currentX,test_Missile.currentY);
+    test_Missile = missile_Movement(11,11,test_Missile);
+    printf("Testing missile movement position after X:%d Y:%d\n",test_Missile.currentX,test_Missile.currentY);
+
+    printf("Testing missile destroyed Before:%d\n",test_Missile.destroyed);
+    test_Missile = missile_Destroyed(test_Missile);
+    printf("Testing missile destroyed After:%d\n",test_Missile.destroyed);
+
+    printf("Testing enemy missile fired :%d\n",test_Missile.team);
+    test_Missile = enemy_Missile_Fired();
+    printf("Testing enemy missile fired :%d\n",test_Missile.team);
+
+    printf("Testing friendly missile fired :%d\n",test_Missile.team);
+    test_Missile = friendly_Missile_Fired(100,100);
+    printf("Testing friendly missile fired :%d\n",test_Missile.team);
+
+    printf("Testing silo choice:%d\n",choose_silo(1));
+    printf("Testing silo choice:%d\n",choose_silo(200));
+    printf("Testing silo choice:%d\n",choose_silo(500));
+}
+
+/* raster.c test driver */
+void testRaster(char *base, long *iBase){
+	int count = 0;
+	int x = 0;
+
+	fill_screen(base, 0);
+	
+	plot_bitmap(iBase,288,336,siloLeft_bitmap,32);
+	plot_bitmap(iBase,320,336,siloRight_bitmap,32);
+
+	/*draw_Line(base,32,0,32,600);
+	draw_Line(base,64,0,64,600);
+	draw_Line(base,96,0,96,600);
+	draw_Line(base,128,0,128,600);
+    draw_Line(base,160,0,160,600);
+	draw_Line(base,192,0,192,600);
+	draw_Line(base,224,0,224,600);
+	draw_Line(base,256,0,256,600);
+	draw_Line(base,288,0,288,600);
+	draw_Line(base,320,0,320,600);
+	draw_Line(base,352,0,352,600);
+	draw_Line(base,384,0,384,600);
+	draw_Line(base,416,0,416,600);
+	draw_Line(base,448,0,448,600);
+    draw_Line(base,480,0,480,600);
+	draw_Line(base,512,0,512,600);
+	draw_Line(base,544,0,544,600);
+	draw_Line(base,576,0,576,600);
+	draw_Line(base,608,0,608,600);*/
+
+	plot_bitmap(iBase,64,336,cityLeft_bitmap,32);
+	plot_bitmap(iBase,144,336,cityLeft_bitmap,32);
+	plot_bitmap(iBase,224,336,cityLeft_bitmap,32);
+	plot_bitmap(iBase,384,336,cityLeft_bitmap,32);
+	plot_bitmap(iBase,464,336,cityLeft_bitmap,32);
+	plot_bitmap(iBase,544,336,cityLeft_bitmap,32);
+
+	plot_bitmap(iBase,100,200,explosions[0],32);
+	plot_bitmap(iBase,180,200,explosions[1],32);
+	plot_bitmap(iBase,260,200,explosions[2],32);
+	plot_bitmap(iBase,340,200,explosions[3],32);
+	plot_bitmap(iBase,420,200,explosions[4],32);
+	plot_bitmap(iBase,500,200,explosions[5],32);
+
+	plot_bitmap(iBase,100,100,missile_bitmap,32);
+	draw_Line(base,0,0,100,100);
+	
+	while (count < 20){
+		plot_bitmap(iBase,x,368,blackBox,32);
+		count++;
+		x += 32;
+	}
+}

@@ -1,0 +1,81 @@
+#include "model.h"
+#include "raster.h"
+#include "td.h"
+
+long clockGet();
+
+void animate_main(char *base, long *iBase){
+	long clock;
+	long newClock;
+	int mouseClicked = 0;
+	unsigned short mouseX,mouseY;
+	
+	struct missile_Silo middle_Silo = {10000,1,288,336};
+	struct missile enemyMis = {0,0,0,0,1,1};
+	struct missile friendMis = {0,0,0,0,0,1};
+	struct city city1 = {1,64,336};
+	struct city city2 = {1,144,336};
+	struct city city3 = {1,224,336};
+	struct city city4 = {1,384,336};
+	struct city city5 = {1,464,336};
+	struct city city6 = {1,544,336};
+	struct explosion exp = {0,0,0,0};
+	
+
+	while(!Cconis()){
+		if (mouseClicked == 1){ /* process on input */
+				enemyMis = enemy_Missile_Fired(mouseX, mouseY, enemyMis);
+		}
+		clock = clockGet();
+		if (clock != newClock){ /* process on clock change */
+			mouseClicked = get_mouse_pos(&mouseX,&mouseY);
+			plot_bitmap(iBase,mouseX,mouseY,mouse,6);
+			
+			clear_screen(base);
+			render_main(iBase, city1, city2, city3, city4, city5, city6, middle_Silo, enemyMis, exp);
+			
+			if (enemyMis.currentX < enemyMis.endX){ 
+				enemyMis.currentX++;
+				enemyMis.currentY++;
+			}
+			else
+			{
+				enemyMis.currentX = enemyMis.endX;
+				enemyMis.currentY = enemyMis.endY;
+			}
+			if (enemyMis.currentX == enemyMis.endX && enemyMis.currentY == enemyMis.endY && enemyMis.endX != 0)
+			{
+				enemyMis.destroyed = 1;
+				exp.exists = 1;
+				exp.pX = enemyMis.endX;
+				exp.pY = enemyMis.endY;
+				if(exp.size < 5 && clock % 15 == 0)
+				{
+					exp.size++;
+				}
+				if(exp.size == 5)
+				{
+					exp.exists = 0;
+				}
+			}
+			
+		}
+		
+		newClock = clockGet();
+	}
+	
+
+}
+
+long clockGet()
+{
+	long *timer = 0x462;
+	long c_time;
+	long old_ssp;
+
+	old_ssp = Super(0);
+	c_time = *timer;
+	Super(old_ssp);
+
+	return c_time;
+}

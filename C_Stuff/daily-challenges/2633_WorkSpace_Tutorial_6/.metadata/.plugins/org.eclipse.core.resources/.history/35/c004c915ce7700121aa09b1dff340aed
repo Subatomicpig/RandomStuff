@@ -1,0 +1,59 @@
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+
+public class lab implements ActionListener  {
+
+	
+	private JFrame mainWindow = new JFrame("Interface Lab");
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+		
+		lab lab = new lab();
+		lab.show();
+
+	}
+	
+	
+	public void show()
+	{
+		mainWindow.setVisible(true);
+	}
+	
+	private void setUpWindow()
+	{
+		Container container = mainWindow.getContentPane();
+		container.setLayout(new BorderLayout());
+		container.setBounds(10000, 10000, 10000, 10000);
+		
+		
+		JPanel display = new JPanel(new GridLayout(0,2,5,5));
+		display.setBorder( BorderFactory.createTitledBorder("Display") );
+		
+		
+		
+		container.add(display,BorderLayout.CENTER);
+		
+
+		
+		
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+}

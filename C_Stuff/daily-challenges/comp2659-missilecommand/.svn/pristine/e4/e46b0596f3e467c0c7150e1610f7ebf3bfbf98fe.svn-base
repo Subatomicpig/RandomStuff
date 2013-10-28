@@ -1,0 +1,5 @@
+prog: model.o
+	cc68x -g model.o -o prog
+
+model.o: model.c model.h
+	cc68x -g -c model.c

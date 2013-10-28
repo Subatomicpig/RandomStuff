@@ -1,0 +1,172 @@
+/*
+	Comp 2659 Assignment: Missile Command
+	Donovan Paget & Ryan Wright
+*/
+#include "model.h"
+#include "raster.h"
+#include "td.h"
+
+long clockGet();
+void processEnemyMissiles(struct missile *mis, struct explosion *exp, long clock);
+/*void getPositions(unsigned int,unsigned int,unsigned int,unsigned int,unsigned int[],unsigned int[]);*/
+
+
+/*
+	Purpose: animate and run the game with the clock
+	Input  : a char length pointer to the frame buffer and a long length pointer to the frame buffer
+	Returns: nothing, but constantly runs the game and its functions
+	Assume : nothing
+*/
+void animate_main(char *base, long *iBase){
+	
+	int x,y = 0;
+	long clock;
+	long newClock;
+	int mouseClicked = 0;
+	unsigned short mouseX,mouseY;
+	
+	struct missile_Silo middle_Silo = {10000,1,288,336};
+	struct missile enemyMis = {0,0,0,0,0,0,1,1};
+	struct missile friendMis = {0,0,0,0,0,0,0,1};
+	struct city city1 = {1,64,336};
+	struct city city2 = {1,144,336};
+	struct city city3 = {1,224,336};
+	struct city city4 = {1,384,336};
+	struct city city5 = {1,464,336};
+	struct city city6 = {1,544,336};
+	struct explosion exp = {0,0,0,0};
+	
+
+	while(!Cconis()){
+		if (mouseClicked == 1){ /* process on input */
+				enemyMis = enemy_Missile_Fired(mouseX, mouseY, enemyMis);
+				
+		}
+		clock = clockGet();
+		if (clock != newClock){ /* process on clock change */
+			mouseClicked = get_mouse_pos(&mouseX,&mouseY);
+			plot_bitmap(iBase,mouseX,mouseY,mouse,6);
+			
+			clear_screen(base);
+			render_main(iBase, city1, city2, city3, city4, city5, city6, middle_Silo, enemyMis, exp);
+			if (enemyMis.destroyed == 0 || exp.exists == 1){
+			}
+	
+			
+		}
+		
+		newClock = clockGet();
+	}
+	
+
+}
+
+/*
+	Purpose: animate the enemy missiles and the lines following them
+	Input  : a missile struct, an explosion struct, and the clock
+	Returns: nothing, but updates the missiles current position, and updates the explosion if necessary
+	Assume : nothing
+*/
+void processEnemyMissiles(struct missile *mis, struct explosion *exp, long clock){
+			
+			if ((*mis).currentX < (*mis).endX){ 
+
+			}
+			if ((*mis).currentX == (*mis).endX || (*mis).currentY == (*mis).endY && (*mis).endX != 0)
+			{
+				(*mis).destroyed = 1;
+				(*exp).exists = 1;
+				(*exp).pX = (*mis).endX;
+				(*exp).pY = (*mis).endY;
+				if((*exp).size < 5 && clock % 15 == 0)
+				{
+					(*exp).size++;
+				}
+				if((*exp).size == 5)
+				{
+					(*exp).size = 0;
+					(*exp).exists = 0;
+					(*mis).currentX = 0;
+					(*mis).currentY = 0;
+				}
+				
+			}
+}
+
+/*void getPositions(unsigned int startX,unsigned int startY, unsigned int endX,unsigned int endY,unsigned int posX[], unsigned int posY[])
+{
+	int longest,shortest,numerator,i;
+	int w = endX - startX;
+    int h = endY - startY;
+    int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0 ;
+	if (w < 0){
+		dx1 = -1;
+	}		
+	else if (w > 0){
+		dx1 = 1 ;
+	}
+    if (h<0){ 
+		dy1 = -1;
+	}		
+	else if (h>0){
+		dy1 = 1;
+	}
+    if (w<0){
+		dx2 = -1;
+	}		
+	else if (w>0){ 
+		dx2 = 1;
+	}
+    longest = abs(w);
+    shortest = abs(h);
+    
+	if (!(longest > shortest)) {
+        longest = abs(h) ;
+        shortest = abs(w) ;
+        if (h < 0){
+			dy2 = -1;
+		}	
+		else if (h > 0){
+			dy2 = 1;
+		}
+        dx2 = 0;            
+    }
+	
+	numerator = longest >> 1;
+    
+	for (i=0; i <= longest; i++) {
+        numerator += shortest;
+        if (!(numerator<longest)) {
+            numerator -= longest;
+            posX[i] = dx1;
+            posY[i] = dy1;
+			
+        } else {
+            posX[i] = dx2;
+            posY[i] = dy2;
+			printf("%du %du \n",dx1,dy1);
+        }
+    }
+	posX[i] = -1;
+	posY[1] = -1;
+
+}*/
+
+/*
+	Purpose: get the current time on the clock
+	Input  : nothing
+	Returns: current clock time
+	Assume : nothing
+*/
+long clockGet()
+{
+	long *timer = 0x462;
+	long c_time;
+	long old_ssp;
+
+	old_ssp = Super(0);
+	c_time = *timer;
+	Super(old_ssp);
+
+	return c_time;
+}

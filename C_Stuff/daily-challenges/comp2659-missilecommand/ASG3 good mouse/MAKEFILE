@@ -1,0 +1,55 @@
+missile: td.o raster.o renderer.o model.o animator.o clear_qk.o sound.o music.o input.o effects.o
+	cc68x -g td.o clear_qk.o raster.o renderer.o model.o animator.o sound.o music.o input.o effects.o -o missile
+	
+test: td.o raster.o renderer.o model.o animator.o clear_qk.o sound.o input.o
+	cc68x -g td.o clear_qk.o raster.o renderer.o model.o animator.o sound.o input.o effects.o -o test
+	
+Tmusic: Tmusic.o sound.o music.o effects.o
+	cc68x -g Tmusic.o sound.o music.o effects.o -o Tmusic
+	
+Tmodel: Tmodel.o model.o
+	cc68x -g Tmodel.o model.o -o Tmodel
+	
+Traster: Traster.o raster.o
+	cc68x -g Traster.o raster.o -o Traster
+
+td.o: td.c raster.o renderer.o model.o animator.o
+	cc68x -g -c td.c
+	
+Tmusic.o: Tmusic.c music.o sound.o
+	cc68x -g -c Tmusic.c
+
+Tmodel.o: Tmodel.c
+	cc68x -g -c Tmodel.c
+	
+Traster.o: Traster.c
+	cc68x -g -c Traster.c
+	
+clear_qk.o: clear_qk.s
+		gen -D -L2 clear_qk.s
+ 
+animator.o: animator.c animator.h model.h raster.h td.h input.h
+	cc68x -g -c animator.c
+
+raster.o: raster.c raster.h
+	cc68x -g -c raster.c		
+
+model.o: model.c model.h
+	cc68x -g -c model.c
+
+renderer.o: renderer.c renderer.h model.h raster.h
+	cc68x -g -c renderer.c
+	
+sound.o: sound.c sound.h
+	cc68x -g -c sound.c
+	
+music.o: music.c music.h
+	cc68x -g -c music.c
+	
+input.o: input.c input.h
+	cc68x -g -c input.c
+	
+effects.o: effects.c effects.h
+	cc68x -g -c effects.c
+
+

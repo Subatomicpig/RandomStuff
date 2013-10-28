@@ -1,0 +1,37 @@
+
+import java.awt.*;
+import javax.swing.*;
+
+import java.awt.event.*;
+
+
+public class lab1 {
+
+	private static JFrame mainWindow = new JFrame("JButton example");
+	
+	
+	
+	public static void main(String[] args) {
+		
+		
+		Container container = mainWindow.getContentPane();
+		container.setLayout(new BorderLayout());
+		
+		
+		JPanel display = new JPanel(new GridLayout(0,2,5,5));
+		display.setBorder( BorderFactory.createTitledBorder("Display") );
+		
+		
+		container.add(display,BorderLayout.CENTER);
+		
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		int x = (screen.width/2);
+		int y = (screen.height/2);
+		
+		mainWindow.setSize(400, 400);
+		mainWindow.setLocation(x, y);
+		
+		mainWindow.setVisible(true);
+	}
+
+}

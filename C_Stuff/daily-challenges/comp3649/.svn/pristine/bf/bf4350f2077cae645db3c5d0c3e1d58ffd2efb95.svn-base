@@ -1,0 +1,23 @@
+
+
+%creates a blank puzzle with 5 sets
+blank(puzzle(Unas,[],Sets,Sets,Sets)):- numlist(1,9,Inds),
+										setof(Row/Col/Reg,
+											 (member(Row,Inds),
+											  member(Col,Inds),
+											  region(Row,Col,Reg)),
+											  Unas),
+											  setof(I - Inds,
+													member(I,Inds),
+													Sets
+													).
+												
+%defines region												
+region(Row,Col,Reg) :- NextRow is Row - 1,
+					   NextCol is Col - 1,
+					   Reg is (NextRow - NextRow mod 3 + NextCol // 3) + 1.
+					   
+%place(puzzle(Unas,As,RowSets,ColSets,RegSets),Row,Col,Sym,NewPuz) :- 
+
+
+

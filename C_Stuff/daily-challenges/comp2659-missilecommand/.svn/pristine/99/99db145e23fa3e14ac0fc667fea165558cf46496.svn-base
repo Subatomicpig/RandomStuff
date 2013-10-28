@@ -1,0 +1,60 @@
+#include "bitmap.h"
+#include "Raster.c"
+#include "model.h"
+#include <osbind.h>
+#include <stdio.h>
+
+
+#define BYTES_PER_SCREEN 32000
+
+int main()
+{
+
+	/*frame buffer*/
+	char *base;	
+	long int *iBase;
+
+
+	/*Code for the current state of the game the inital state*/
+	int p1_Score = 0;
+
+	/*The silo position*/
+	struct missile_Silo left_Silo = {10,1,40,350};
+	struct missile_Silo middle_Silo = {10,1,300,350};
+	struct missile_Silo right_Silo = {10,1,560,350};
+
+	/*city position*/
+	struct city city1 = {1,120,350};
+	struct city city2 = {1,200,350};
+	struct city city3 = {1,280,350};
+	struct city city4 = {1,360,350};
+	struct city city5 = {1,440,350};
+	struct city city6 = {1,520,350};
+
+	base = Physbase();
+	iBase = Physbase();
+	
+	
+	fill_screen(base, 0);
+	
+	
+	plot_bitmap(iBase,32,356,siloLeft_bitmap,32);
+	plot_bitmap(iBase,64,356,siloRight_bitmap,32);
+	plot_bitmap(iBase,288,356,siloLeft_bitmap,32);
+	plot_bitmap(iBase,320,356,siloRight_bitmap,32);
+	plot_bitmap(iBase,544,356,siloLeft_bitmap,32);
+	plot_bitmap(iBase,576,356,siloRight_bitmap,32);
+	
+	plot_bitmap(iBase,120,356,cityLeft_bitmap,32);
+	plot_bitmap(iBase,176,356,cityLeft_bitmap,32);
+	
+	plot_bitmap(iBase,232,356,cityLeft_bitmap,32);
+	plot_bitmap(iBase,376,356,cityLeft_bitmap,32);
+	
+	plot_bitmap(iBase,432,356,cityLeft_bitmap,32);
+	plot_bitmap(iBase,488,356,cityLeft_bitmap,32);
+	
+
+
+	return 0;
+}

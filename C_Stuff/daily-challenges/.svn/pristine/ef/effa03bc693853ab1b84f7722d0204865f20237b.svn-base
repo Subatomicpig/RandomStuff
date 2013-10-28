@@ -1,0 +1,81 @@
+
+import java.awt.*;
+
+import javax.swing.*;
+
+import java.awt.event.*;
+
+
+public class LabWindow implements ActionListener{
+
+	private JFrame mainWindow = null;
+	private JLabel label = new JLabel("");
+
+	public LabWindow()
+	{
+		setUpWindow();
+	
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		label.setText("Hello");
+
+	}
+
+	private void setUpWindow()
+	{
+		 mainWindow = new JFrame("JButton example");
+		JButton b;
+		JButton b2;
+
+		Container container = mainWindow.getContentPane();
+		container.setLayout(new BorderLayout());
+
+
+		JPanel display = new JPanel(new GridLayout(0,1,5,5));
+		display.setBorder( BorderFactory.createTitledBorder("Display") );
+		display.add(label);
+		
+
+		JPanel button = new JPanel( new GridLayout(0,1,3,3) );
+		button.setBorder(BorderFactory.createTitledBorder("I MADE A BUTTON"));
+		container.add(button,BorderLayout.SOUTH);
+
+
+		b = new JButton("I AM BUTTON");
+		b.addActionListener(this);
+		b2 = new JButton("B2");
+		b2.addActionListener(this);
+		button.add(b);
+		button.add(b2);
+
+		container.add(display,BorderLayout.CENTER);
+
+
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+
+
+		mainWindow.setSize(400, 400);
+		mainWindow.setLocation(500, 500);
+
+	}
+
+	public void show()
+	{
+		mainWindow.setVisible(true);
+	}
+
+
+	public static void main(String[] args) {
+
+		LabWindow obj = new LabWindow();
+
+
+		obj.show();
+		
+	}
+
+
+
+}

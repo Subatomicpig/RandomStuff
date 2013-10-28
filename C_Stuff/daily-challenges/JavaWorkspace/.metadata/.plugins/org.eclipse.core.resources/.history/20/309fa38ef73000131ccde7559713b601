@@ -1,0 +1,41 @@
+package parser;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
+
+
+
+public class parser {
+
+	//the main class of this program
+	public static void main(String [] args)
+	{
+		//var declartions here
+		Scanner input = null;
+		
+		
+		
+		//open a file for reading
+		try{
+			
+			input = new Scanner(new FileReader("test.txt"));
+					
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+		
+		//wile we have info in our file
+		while(input.hasNext())
+		{
+			
+		}
+	
+		System.out.println("Hello");
+	}
+}
+	
+	
+
